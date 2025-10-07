@@ -5,9 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e00af577-1f8b-4705-b000-117848f8385a" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/apiscripts/api_request.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apiscripts/general.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apiscripts/helpers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sportsdataapp/management/commands/fetch_country.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sportsdataapp/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/sportsdataapp/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sportsdataapp/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/sportsdataapp/models.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
