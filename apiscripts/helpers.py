@@ -1,10 +1,13 @@
 # Import libraries
 from rich.console import Console
 from datetime import datetime
+from django.db.models import Q
+import time
 
 # Import Models
 from sportsdataapp.models import (Country, Competition, Team, Venue,
-                                  Season, Standing, Fixture, TeamSeasonCompetition)
+                                  Season, Standing, Fixture, TeamSeasonCompetition,
+                                  FixtureStats)
 
 # Import Functions
 from apiscripts.api_request import api_request
@@ -154,7 +157,7 @@ def make_season(competition_name: str, year: int):
     competition = Competition.objects.filter(name=competition_name).first()
     if not competition:
         raise ValueError(f'{competition_name} not found.')
-    # Find Season ID
+    # Find Season
     season = Season.objects.filter(competition=competition, year=year).first()
     if not season:
         season = Season(year=year, competition=competition)
@@ -309,7 +312,6 @@ def make_meta_join_table(season: Season):
     new_meta_entries = []
     for pair in unique_home_venue:
         # Find or Make Meta Instance
-
         team = Team.objects.filter(api_id=pair[0]).first()
         meta_instance = TeamSeasonCompetition.objects.filter(season=season, team=team).first()
         if not meta_instance:
@@ -326,3 +328,138 @@ def make_meta_join_table(season: Season):
         console.print(f'Successfully added {len(new_meta_entries)} meta instances!', style="bold green")
     else:
         console.print(f'No new meta instances were added!', style="bold red")
+
+
+# Safely Pull Fixture Statistics
+def safe_stats(stats, index):
+    try:
+        return stats['statistics'][index]['value']
+    except (IndexError, KeyError, TypeError):
+        return None
+
+# Parse Safely Pulled Fixture Statistics
+def parse_stats(stats: dict) -> dict:
+    values = [safe_stats(stats, i) for i in range(17)]
+    return dict(
+        sh_on_goal=values[0],
+        sh_off_goal=values[1],
+        total_sh=values[2],
+        blocked_sh=values[3],
+        sh_inside=values[4],
+        sh_outside=values[5],
+        fouls=values[6],
+        corners=values[7],
+        offsides=values[8],
+        possession=values[9],
+        yellows=values[10],
+        reds=values[11],
+        saves=values[12],
+        tot_passes=values[13],
+        accurate_pass=values[14],
+        percent_pass=values[15],
+        ex_goals=values[16]
+    )
+# Fetch Fixture Statistics for one Team for all Competitions in a Year
+def fetch_fixture_stats_team(year: int, team_name: str):
+    # Find Team
+    team = Team.objects.filter(name=team_name).first()
+    if not team:
+        raise ValueError(f'Could not find Team: {team_name}')
+    # Find Season
+    seasons = TeamSeasonCompetition.objects.select_related('season').filter(season__year=year, team=team.api_id).all()
+    if not seasons:
+        raise ValueError(f'Could not find Season for: {year}')
+    for entry in seasons:
+        # Pull Fixtures list for Team and Season
+        fixtures = Fixture.objects.filter(
+            Q(home_team__name=team_name) | Q(away_team__name=team_name),
+            season=entry.season
+        ).all()
+        if not fixtures:
+            raise ValueError(f'Could not find Fixtures for: {team_name} with Season ID: {entry.season.id}')
+        # Iterate through Fixtures
+        new_fix_stats = []
+        for fixture in fixtures:
+            fix_stats = FixtureStats.objects.filter(fixture=fixture).first()
+            if not fix_stats:
+                # Fetch Fixture Stats
+                time.sleep(8)
+                # API Request Setup
+                url = "https://v3.football.api-sports.io/fixtures/statistics"
+                params = {'fixture': fixture.api_id}
+                # API Request
+                fix_stats_data = api_request(url, params)
+                # Parse Statistics
+                home_stats = fix_stats_data['response'][0]
+                away_stats = fix_stats_data['response'][1]
+                home = parse_stats(home_stats)
+                away = parse_stats(away_stats)
+                home_team = Team.objects.filter(api_id = home_stats['team']['id']).first()
+                away_team = Team.objects.filter(api_id = away_stats['team']['id']).first()
+                fixture_instance = FixtureStats(
+                    fixture_id=fix_stats_data['parameters']['fixture'],
+                    home_team=home_team,
+                    **{f"home_{k}": v for k, v in home.items()},
+                    away_team=away_team,
+                    **{f"away_{k}": v for k, v in away.items()}
+                )
+                new_fix_stats.append(fixture_instance)
+        if new_fix_stats:
+            FixtureStats.objects.bulk_create(new_fix_stats)
+            console.print(f'{len(new_fix_stats)} new fixture statistics were added!', style="bold green")
+        else:
+            console.print(f'No new fixture statistics were added for {team_name}!', style="bold red")
+
+
+def fetch_fixture_stats_team_season(year: int, team_name: str, competition_name: str):
+    # Find Competition
+    competition = Competition.objects.filter(name=competition_name).first()
+    if not competition:
+        raise ValueError(f'Could not find Competition: {competition_name}')
+    # Find Season
+    season = Season.objects.filter(competition=competition, year=year).first()
+    if not season:
+        raise ValueError(f'Could not find Season for: {year} {competition_name}')
+    # Find Team
+    team = Team.objects.filter(name=team_name).first()
+    if not team:
+        raise ValueError(f'Could not find Team: {team_name}')
+    # Pull Fixtures list for Team and Season
+    fixtures = Fixture.objects.filter(
+        Q(home_team__name=team_name) | Q(away_team__name=team_name),
+        season=season
+    ).all()
+    if not fixtures:
+        raise ValueError(f'Could not find Fixtures for: {team_name} from {year} {competition_name}')
+    # Iterate through Fixture IDs
+    new_fix_stats = []
+    for fixture in fixtures:
+        fix_stats = FixtureStats.objects.filter(fixture=fixture).first()
+        if not fix_stats:
+            # Fetch Fixture Stats
+            time.sleep(8)
+            # API Request Setup
+            url = "https://v3.football.api-sports.io/fixtures/statistics"
+            params = {'fixture': fixture.api_id}
+            # API Request
+            fix_stats_data = api_request(url, params)
+            # Parse Statistics
+            home_stats = fix_stats_data['response'][0]
+            away_stats = fix_stats_data['response'][1]
+            home = parse_stats(home_stats)
+            away = parse_stats(away_stats)
+            home_team = Team.objects.filter(api_id=home_stats['team']['id']).first()
+            away_team = Team.objects.filter(api_id=away_stats['team']['id']).first()
+            fixture_instance = FixtureStats(
+                fixture_id=fix_stats_data['parameters']['fixture'],
+                home_team=home_team,
+                **{f"home_{k}": v for k, v in home.items()},
+                away_team=away_team,
+                **{f"away_{k}": v for k, v in away.items()}
+            )
+            new_fix_stats.append(fixture_instance)
+    if new_fix_stats:
+        FixtureStats.objects.bulk_create(new_fix_stats)
+        console.print(f'{len(new_fix_stats)} new fixture statistics were added!', style="bold green")
+    else:
+        console.print(f'No new fixture statistics were added for {competition_name}!', style="bold red")

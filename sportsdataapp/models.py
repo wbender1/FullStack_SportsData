@@ -154,6 +154,7 @@ class Fixture(models.Model):
 # Define FixtureStats Model
 class FixtureStats(models.Model):
     fixture = models.OneToOneField(Fixture, on_delete=models.CASCADE, related_name="stats")
+    home_team = models.ForeignKey(Team,  related_name='home_fixture_stats', on_delete=models.CASCADE)
     home_sh_on_goal = models.IntegerField(null=True, blank=True)
     home_sh_off_goal = models.IntegerField(null=True, blank=True)
     home_total_sh = models.IntegerField(null=True, blank=True)
@@ -171,6 +172,7 @@ class FixtureStats(models.Model):
     home_accurate_pass = models.IntegerField(null=True, blank=True)
     home_percent_pass = models.CharField(max_length=20, null=True, blank=True)
     home_ex_goals = models.CharField(max_length=20, null=True, blank=True)
+    away_team = models.ForeignKey(Team, related_name='away_fixture_stats', on_delete=models.CASCADE)
     away_sh_on_goal = models.IntegerField(null=True, blank=True)
     away_sh_off_goal = models.IntegerField(null=True, blank=True)
     away_total_sh = models.IntegerField(null=True, blank=True)

@@ -5,10 +5,16 @@ from tabulate import tabulate
 # Import Functions
 from apiscripts.helpers import (make_country, fetch_competitions, fetch_teams, fetch_venues,
                                 make_season, fetch_standings, fetch_fixtures, make_meta_join_table,
-                                )
+                                fetch_fixture_stats_team_season, fetch_fixture_stats_team)
 
 
 console = Console()
+
+#****************************************************************************************************#
+
+#**********************************     Fetch Data Functions    *************************************#
+
+#****************************************************************************************************#
 
 # Fetch Country
 def fetch_country(input_country_name: str):
@@ -43,3 +49,12 @@ def fetch_season(competition_name: str, year: int):
     make_meta_join_table(season)
 
 
+# Fetch Fixture Statistics
+def fetch_fixture_stats(year: int, team_name: str, competition_name: str = None):
+    if competition_name:
+        # Fetch Fixture Statistics for one Team for one Season (Competition and Year)
+        fetch_fixture_stats_team_season(year, team_name, competition_name)
+        return
+    else:
+        # Fetch Fixture Statistics for one Team for all Competitions in a Year
+        fetch_fixture_stats_team(year, team_name)
