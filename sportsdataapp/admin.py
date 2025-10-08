@@ -57,7 +57,7 @@ admin.site.register(Season, SeasonAdmin)
 
 
 class FixtureAdmin(admin.ModelAdmin):
-    list_display = ("id", "season_year", "season_competition_name",
+    list_display = ("api_id", "season_year", "season_competition_name",
                     "home_team", "away_team", "venue_name", "referee",
                     "date", "round", "home_goals", "away_goals")
     def season_year(self, obj):

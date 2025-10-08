@@ -121,6 +121,7 @@ class Standing(models.Model):
 
 # Define Fixture Model
 class Fixture(models.Model):
+    api_id = models.IntegerField(primary_key=True)
     season = models.ForeignKey(Season, on_delete=models.CASCADE)
     home_team = models.ForeignKey(Team, related_name='home_fixtures', on_delete=models.CASCADE)
     away_team = models.ForeignKey(Team, related_name='away_fixtures', on_delete=models.CASCADE)
