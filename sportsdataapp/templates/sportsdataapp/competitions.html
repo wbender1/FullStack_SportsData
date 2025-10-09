@@ -1,0 +1,48 @@
+{% extends 'sportsdataapp/base.html' %}
+{% load static %}
+
+{% block content %}
+    <h1>Competitions</h1>
+        <p>Search and View Competitions</p>
+
+        <form method="get" action="{% url 'competitions' %}" class="form-inline" style="margin-bottom: 20px;">
+        <div class="form-group">
+            <label for="country">Country:</label>
+            <input type="text" id="country" name="country" class="form-control" value="{{ request.GET.country }}">
+        </div>
+        <div class="form-group" style="margin-left: 10px;">
+            <label for="type">Type:</label>
+            <select id="type" name="type" class="form-control">
+                <option value="">All</option>
+                <option value="League" {% if request.GET.type == "League" %}selected{% endif %}>League</option>
+                <option value="Cup" {% if request.GET.type == "Cup" %}selected{% endif %}>Cup</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary" style="margin-left: 10px;">Search</button>
+        </form>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Country</th>
+                    <th>Type</th>
+                    <th>Logo</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for competition in competitions %}
+                    <tr>
+                        <td>{{competition.name }}</td>
+                        <td>{{competition.country }}</td>
+                        <td>{{competition.type }}</td>
+                        <td><img src="{{ competition.logo }}" alt="{{ competition.name }} logo" width="40" height="40"></td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4">No competitions found.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+{% endblock %}

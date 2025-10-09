@@ -1,0 +1,17 @@
+{% extends 'sportsdataapp/base.html' %}
+{% load static %}
+{% block content %}
+<html>
+    <head>
+        <title>Home Page</title>
+    </head>
+    <body>
+        <h1>Welcome to Football Stats</h1>
+        <p></p>
+        <a href="{% url 'competitions' %}" class="btn btn-primary" style="font-weight:bold;">
+        View Competitions
+        </a>
+
+    </body>
+</html>
+{% endblock content %}
