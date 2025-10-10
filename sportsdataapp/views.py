@@ -14,9 +14,12 @@ def index(request):
 def competitions_view(request):
     if request.method == 'GET':
         competitions = Competition.objects.all()
+        name_query = request.GET.get("name", '')
         country_query = request.GET.get("country", '')
         competition_query = request.GET.get("type")
         # Filter Competitions
+        if name_query:
+            competitions = competitions.filter(name__icontains=name_query)
         if competition_query:
             competitions = competitions.filter(type=competition_query).order_by('country__name', 'name')
         if country_query:
@@ -53,12 +56,18 @@ def standings_view(request):
 def teams_view(request):
     if request.method == 'GET':
         teams = Team.objects.all()
+        name_query = request.GET.get("name", '')
         country_query = request.GET.get("country", '')
+        short_name_query = request.GET.get("short_name", '')
         national_query = request.GET.get("type", '')
         competition_query = request.GET.get("competition", '')
         # Filter Teams
+        if name_query:
+            teams = teams.filter(name__icontains=name_query)
         if country_query:
             teams = teams.filter(country__name__icontains=country_query)
+        if short_name_query:
+            teams = teams.filter(short_name__icontains=short_name_query)
         if competition_query:
             teams = teams.filter(teamseasoncompetition__competition__name__icontains=competition_query)
         if national_query:

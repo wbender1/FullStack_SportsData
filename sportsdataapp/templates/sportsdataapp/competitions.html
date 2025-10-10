@@ -6,20 +6,24 @@
         <p>Search and View Competitions</p>
 
         <form method="get" action="{% url 'competitions' %}" class="form-inline" style="margin-bottom: 20px;">
-        <div class="form-group">
-            <label for="country">Country:</label>
-            <input type="text" id="country" name="country" class="form-control" value="{{ request.GET.country }}">
-        </div>
-        <div class="form-group" style="margin-left: 10px;">
-            <label for="type">Type:</label>
-            <select id="type" name="type" class="form-control">
-                <option value="">All</option>
-                <option value="League" {% if request.GET.type == "League" %}selected{% endif %}>League</option>
-                <option value="Cup" {% if request.GET.type == "Cup" %}selected{% endif %}>Cup</option>
-            </select>
-        </div>
-        <button type="submit" class="btn btn-primary" style="margin-left: 10px;">Search</button>
-        <a href="{% url 'competitions' %}" class="btn btn-default" style="margin-left: 10px;">Clear</a>
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" class="form-control" value="{{ request.GET.name }}">
+            </div>
+            <div class="form-group">
+                <label for="country">Country:</label>
+                <input type="text" id="country" name="country" class="form-control" value="{{ request.GET.country }}">
+            </div>
+            <div class="form-group" style="margin-left: 10px;">
+                <label for="type">Type:</label>
+                <select id="type" name="type" class="form-control">
+                    <option value="">All</option>
+                    <option value="League" {% if request.GET.type == "League" %}selected{% endif %}>League</option>
+                    <option value="Cup" {% if request.GET.type == "Cup" %}selected{% endif %}>Cup</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary" style="margin-left: 10px;">Search</button>
+            <a href="{% url 'competitions' %}" class="btn btn-default" style="margin-left: 10px;">Clear</a>
         </form>
         <p>{{ total }} competitions found</p>
 
