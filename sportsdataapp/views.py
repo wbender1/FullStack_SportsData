@@ -82,4 +82,26 @@ def teams_view(request):
 
 # Venues View
 def venues_view(request):
-    return 0
+    if request.method == 'GET':
+        venues = Venue.objects.all()
+        name_query = request.GET.get("name", '')
+        city_query = request.GET.get("city", '')
+        country_query = request.GET.get("country", '')
+        surface_query = request.GET.get("surface", '')
+        competition_query = request.GET.get("competition", '')
+        # Filter Venues
+        if name_query:
+            venues = venues.filter(name__icontains=name_query)
+        if city_query:
+            venues = venues.filter(city__icontains=city_query)
+        if country_query:
+            venues = venues.filter(country__name__icontains=country_query)
+        if surface_query:
+            venues = venues.filter(surface__icontains=surface_query)
+        if competition_query:
+            venues = venues.filter(teamseasoncompetition__competition__name__icontains=competition_query)
+
+    # Order Venues
+    venues = venues.order_by('country__name', 'name')
+    total = venues.count()
+    return render(request, 'sportsdataapp/venues.html', {'venues': venues, 'total': total}, )
