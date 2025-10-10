@@ -25,7 +25,7 @@ def competitions_view(request):
         if country_query:
             competitions = competitions.filter(country__name__icontains=country_query)
     # Order Competitions
-    competitions = competitions.order_by('country__name', 'name')
+    competitions = competitions.order_by('country__name', '-type', 'name')
     total = competitions.count()
     return render(request, 'sportsdataapp/competitions.html', {'competitions': competitions, 'total': total})
 
@@ -62,7 +62,7 @@ def seasons_view(request):
         if competition_type_query:
             seasons = seasons.filter(competition__type=competition_type_query)
     # Order Seasons
-    seasons = seasons.order_by('year', 'competition__country__name', 'competition__name', 'competition__type')
+    seasons = seasons.order_by('year', 'competition__country__name', '-competition__type', 'competition__name')
     total = seasons.count()
     return render(request, 'sportsdataapp/seasons.html', {'seasons': seasons, 'total': total})
 

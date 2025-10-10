@@ -346,12 +346,13 @@ def make_meta_join_table(season: Season):
         # Find or Make Meta Instance
         team = Team.objects.filter(api_id=pair[0]).first()
         meta_instance = TeamSeasonCompetition.objects.filter(season=season, team=team).first()
+        venue = Venue.objects.filter(api_id=pair[1]).first()
         if not meta_instance:
             meta_instance = TeamSeasonCompetition(
                 team=team,
                 season=season,
                 competition=season.competition,
-                venue_id=pair[1]
+                venue=venue
             )
             new_meta_entries.append(meta_instance)
             console.print(f'Created new meta instance: {team.name, season.year, season.competition.name, pair[0]}.', style="green")
