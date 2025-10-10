@@ -22,7 +22,7 @@ admin.site.register(Competition, CompetitionAdmin)
 
 class TeamAdmin(admin.ModelAdmin):
     list_display = ("api_id", "name", "short_name", "country_name",
-                    "founded", "national", "logo_url")
+                    "founded", "national", "logo")
     def country_name(self, obj):
         return obj.country.name
 

@@ -21,5 +21,12 @@ from sportsdataapp import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name="index"),
-    path('competitions/', views.competitions_view, name='competitions')
+    path('competitions/', views.competitions_view, name='competitions'),
+    path('countries/', views.countries_view, name='countries'),
+    path('fixtures/', views.fixtures_view, name='fixtures'),
+    path('fixturestats/', views.fixture_stats_view, name='fixturestats'),
+    path('seasons/', views.seasons_view, name='seasons'),
+    path('standings/', views.standings_view, name='standings'),
+    path('teams/', views.teams_view, name='teams'),
+    path('venues/', views.venues_view, name='venues'),
 ]

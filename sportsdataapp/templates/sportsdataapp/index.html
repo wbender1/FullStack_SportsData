@@ -3,14 +3,19 @@
 {% block content %}
 <html>
     <head>
-        <title>Home Page</title>
+        <title>Football Stats</title>
     </head>
     <body>
         <h1>Welcome to Football Stats</h1>
-        <p></p>
-        <a href="{% url 'competitions' %}" class="btn btn-primary" style="font-weight:bold;">
-        View Competitions
-        </a>
+        <p>View and Search by Table</p>
+        <a href="{% url 'countries' %}" class="btn btn-primary" style="font-weight:bold;">Countries</a>
+        <a href="{% url 'competitions' %}" class="btn btn-primary" style="font-weight:bold;">Competitions</a>
+        <a href="{% url 'teams' %}" class="btn btn-primary" style="font-weight:bold;">Teams</a>
+        <a href="{% url 'venues' %}" class="btn btn-primary" style="font-weight:bold;">Venues</a>
+        <a href="{% url 'seasons' %}" class="btn btn-primary" style="font-weight:bold;">Seasons</a>
+        <a href="{% url 'standings' %}" class="btn btn-primary" style="font-weight:bold;">Standings</a>
+        <a href="{% url 'fixtures' %}" class="btn btn-primary" style="font-weight:bold;">Fixtures</a>
+        <a href="{% url 'fixturestats' %}" class="btn btn-primary" style="font-weight:bold;">Fixture Stats</a>
 
     </body>
 </html>

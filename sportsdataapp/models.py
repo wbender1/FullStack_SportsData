@@ -37,7 +37,7 @@ class Team(models.Model):
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
     founded = models.IntegerField(null=True, blank=True)
     national = models.BooleanField(default=False)
-    logo_url = models.URLField(null=True, blank=True)
+    logo = models.URLField(null=True, blank=True)
 
     class Meta:
         verbose_name = "Team"

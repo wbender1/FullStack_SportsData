@@ -19,7 +19,9 @@
             </select>
         </div>
         <button type="submit" class="btn btn-primary" style="margin-left: 10px;">Search</button>
+        <a href="{% url 'competitions' %}" class="btn btn-default" style="margin-left: 10px;">Clear</a>
         </form>
+        <p>{{ total }} competitions found</p>
 
         <table class="table">
             <thead>

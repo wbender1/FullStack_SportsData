@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.db.models import Q
-from .models import Competition, Country, Fixture, FixtureStats, Season, Standing, Team, Venue
+from .models import Competition, Country, Fixture, FixtureStats, Season, Standing, Team, TeamSeasonCompetition, Venue
 
 # Create your views here.
 
@@ -10,24 +10,67 @@ def index(request):
     return render(request, "sportsdataapp/index.html")
 
 
-# Search Competitions View
+# Competitions View
 def competitions_view(request):
     if request.method == 'GET':
         competitions = Competition.objects.all()
         country_query = request.GET.get("country", '')
         competition_query = request.GET.get("type")
-        if country_query and competition_query:
-            competitions = competitions.filter(
-                country__name__icontains=country_query,
-                type=competition_query).order_by('name')
-            return render(request, 'sportsdataapp/competitions.html', {'competitions': competitions})
+        # Filter Competitions
         if competition_query:
             competitions = competitions.filter(type=competition_query).order_by('country__name', 'name')
-            return render(request, 'sportsdataapp/competitions.html', {'competitions': competitions})
         if country_query:
             competitions = competitions.filter(country__name__icontains=country_query).order_by('name')
-            return render(request, 'sportsdataapp/competitions.html', {'competitions': competitions})
-        else:
-            competitions = competitions.order_by('country__name', 'name')
-            return render(request, 'sportsdataapp/competitions.html', {'competitions': competitions})
-    return render(request, 'sportsdataapp/competitions.html',)
+    # Order Competitions
+    competitions = competitions.order_by('country__name', 'name')
+    total = competitions.count()
+    return render(request, 'sportsdataapp/competitions.html', {'competitions': competitions, 'total': total})
+
+
+# Competitions View
+def countries_view(request):
+    countries = Country.objects.all().order_by('name')
+    total = countries.count()
+    return render(request, 'sportsdataapp/countries.html', {'countries': countries, 'total': total})
+
+# Fixtures View
+def fixtures_view(request):
+    return 0
+
+# Fixture Stats View
+def fixture_stats_view(request):
+    return 0
+
+# Seasons View
+def seasons_view(request):
+    return 0
+
+# Standings View
+def standings_view(request):
+    return 0
+
+# Teams View
+def teams_view(request):
+    if request.method == 'GET':
+        teams = Team.objects.all()
+        country_query = request.GET.get("country", '')
+        national_query = request.GET.get("type", '')
+        competition_query = request.GET.get("competition", '')
+        # Filter Teams
+        if country_query:
+            teams = teams.filter(country__name__icontains=country_query)
+        if competition_query:
+            teams = teams.filter(teamseasoncompetition__competition__name__icontains=competition_query)
+        if national_query:
+            if national_query == "true":
+                teams = teams.filter(national=True)
+            if national_query == "false":
+                teams = teams.filter(national=False)
+    # Order Teams
+    teams = teams.order_by('country__name', 'national', 'name')
+    total = teams.count()
+    return render(request, 'sportsdataapp/teams.html', {'teams': teams, 'total': total},)
+
+# Venues View
+def venues_view(request):
+    return 0
