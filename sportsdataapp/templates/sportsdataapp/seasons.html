@@ -1,0 +1,60 @@
+{% extends 'sportsdataapp/base.html' %}
+{% load static %}
+
+{% block content %}
+    <h1>Seasons</h1>
+        <p>Search and View Seasons</p>
+
+        <form method="get" action="{% url 'seasons' %}" class="form-inline" style="margin-bottom: 20px;">
+            <div class="form-group">
+                <label for="year">Year:</label>
+                <input type="text" id="year" name="year" class="form-control" value="{{ request.GET.year }}">
+            </div>
+            <div class="form-group">
+                <label for="country">Country:</label>
+                <input type="text" id="country" name="country" class="form-control" value="{{ request.GET.country }}">
+            </div>
+            <div class="form-group">
+                <label for="name">Competition Name:</label>
+                <input type="text" id="name" name="name" class="form-control" value="{{ request.GET.name }}">
+            </div>
+            <div class="form-group" style="margin-left: 10px;">
+                <label for="type">Type:</label>
+                <select id="type" name="type" class="form-control">
+                    <option value="">All</option>
+                    <option value="League" {% if request.GET.type == "League" %}selected{% endif %}>League</option>
+                    <option value="Cup" {% if request.GET.type == "Cup" %}selected{% endif %}>Cup</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary" style="margin-left: 10px;">Search</button>
+            <a href="{% url 'seasons' %}" class="btn btn-default" style="margin-left: 10px;">Clear</a>
+        </form>
+        <p>{{ total }} seasons found</p>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Year</th>
+                    <th>Country</th>
+                    <th>Competition</th>
+                    <th>Competition Type</th>
+                    <th>Competition Logo</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for season in seasons %}
+                    <tr>
+                        <td>{{season.year }}</td>
+                        <td>{{season.competition.country }}</td>
+                        <td>{{season.competition }}</td>
+                        <td>{{season.competition.type }}</td>
+                        <td><img src="{{ season.competition.logo }}" alt="{{ season.competition }} logo" width="40" height="40"></td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4">No seasons found.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+{% endblock %}

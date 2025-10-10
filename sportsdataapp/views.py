@@ -21,9 +21,9 @@ def competitions_view(request):
         if name_query:
             competitions = competitions.filter(name__icontains=name_query)
         if competition_query:
-            competitions = competitions.filter(type=competition_query).order_by('country__name', 'name')
+            competitions = competitions.filter(type=competition_query)
         if country_query:
-            competitions = competitions.filter(country__name__icontains=country_query).order_by('name')
+            competitions = competitions.filter(country__name__icontains=country_query)
     # Order Competitions
     competitions = competitions.order_by('country__name', 'name')
     total = competitions.count()
@@ -46,7 +46,25 @@ def fixture_stats_view(request):
 
 # Seasons View
 def seasons_view(request):
-    return 0
+    if request.method == 'GET':
+        seasons = Season.objects.all()
+        year_query = request.GET.get("year", '')
+        country_query = request.GET.get("country", '')
+        competition_query = request.GET.get("competition", '')
+        competition_type_query = request.GET.get("type")
+        # Filter Seasons
+        if year_query:
+            seasons = seasons.filter(year__icontains=year_query)
+        if country_query:
+            seasons = seasons.filter(competition__country__name__icontains=country_query)
+        if competition_query:
+            seasons = seasons.filter(competition__name__icontains=competition_query)
+        if competition_type_query:
+            seasons = seasons.filter(competition__type=competition_type_query)
+    # Order Seasons
+    seasons = seasons.order_by('year', 'competition__country__name', 'competition__name', 'competition__type')
+    total = seasons.count()
+    return render(request, 'sportsdataapp/seasons.html', {'seasons': seasons, 'total': total})
 
 # Standings View
 def standings_view(request):
@@ -76,7 +94,7 @@ def teams_view(request):
             if national_query == "false":
                 teams = teams.filter(national=False)
     # Order Teams
-    teams = teams.order_by('country__name', 'national', 'name')
+    teams = teams.order_by('country__name', 'teamseasoncompetition__competition__name', 'national', 'name')
     total = teams.count()
     return render(request, 'sportsdataapp/teams.html', {'teams': teams, 'total': total},)
 
@@ -100,8 +118,7 @@ def venues_view(request):
             venues = venues.filter(surface__icontains=surface_query)
         if competition_query:
             venues = venues.filter(teamseasoncompetition__competition__name__icontains=competition_query)
-
     # Order Venues
-    venues = venues.order_by('country__name', 'name')
+    venues = venues.order_by('country__name', 'teamseasoncompetition__competition__name', 'name')
     total = venues.count()
     return render(request, 'sportsdataapp/venues.html', {'venues': venues, 'total': total}, )

@@ -36,7 +36,7 @@ class Team(models.Model):
     short_name = models.CharField(max_length=10, null=True, blank=True)
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
     founded = models.IntegerField(null=True, blank=True)
-    national = models.BooleanField(default=False)
+    national = models.BooleanField(default=False, null=True, blank=True)
     logo = models.URLField(null=True, blank=True)
 
     class Meta:
@@ -81,7 +81,7 @@ class TeamSeasonCompetition(models.Model):
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
     season = models.ForeignKey(Season, on_delete=models.CASCADE)
     competition = models.ForeignKey(Competition, on_delete=models.CASCADE)
-    venue = models.ForeignKey(Venue, on_delete=models.CASCADE)
+    venue = models.ForeignKey(Venue, on_delete=models.CASCADE, null=True, blank=True)
 
 
 # Define Standings Model
@@ -123,9 +123,9 @@ class Standing(models.Model):
 class Fixture(models.Model):
     api_id = models.IntegerField(primary_key=True)
     season = models.ForeignKey(Season, on_delete=models.CASCADE)
-    home_team = models.ForeignKey(Team, related_name='home_fixtures', on_delete=models.CASCADE)
-    away_team = models.ForeignKey(Team, related_name='away_fixtures', on_delete=models.CASCADE)
-    venue = models.ForeignKey(Venue, on_delete=models.CASCADE)
+    home_team = models.ForeignKey(Team, related_name='home_fixtures', on_delete=models.CASCADE, null=True, blank=True)
+    away_team = models.ForeignKey(Team, related_name='away_fixtures', on_delete=models.CASCADE, null=True, blank=True)
+    venue = models.ForeignKey(Venue, on_delete=models.CASCADE, null=True, blank=True)
     competition = models.ForeignKey(Competition, on_delete=models.CASCADE)
     referee = models.CharField(max_length=50, null=True, blank=True)
     date = models.DateTimeField(null=True, blank=True)

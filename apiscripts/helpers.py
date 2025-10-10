@@ -99,7 +99,7 @@ def fetch_teams(input_country_name: str):
                 country=country,
                 founded=team_data['founded'],
                 national=team_data['national'],
-                logo_url=team_data['logo'],
+                logo=team_data['logo']
             )
             new_teams.append(team)
             console.print(f'Created new team: {team.name}.', style="green")
@@ -261,6 +261,38 @@ def fetch_fixtures(season: Season, competition: Competition):
                 )
                 venue.save()
                 console.print(f'Created new venue: {venue.name}.', style="green")
+        home_team = entry['teams']['home']
+        team = Team.objects.filter(api_id=home_team['id']).first()
+        if not team:
+            # Create Team
+            country = Country.objects.filter(name=entry['league']['country']).first()
+            team = Team(
+                api_id=home_team['id'],
+                name=home_team['name'],
+                short_name=None,
+                country=country,
+                founded=None,
+                national=None,
+                logo=home_team['logo']
+            )
+            team.save()
+            console.print(f'Created new team: {team.name}.', style="green")
+        away_team = entry['teams']['away']
+        team = Team.objects.filter(api_id=away_team['id']).first()
+        if not team:
+            # Create Team
+            country = Country.objects.filter(name=entry['league']['country']).first()
+            team = Team(
+                api_id=away_team['id'],
+                name=away_team['name'],
+                short_name=None,
+                country=country,
+                founded=None,
+                national=None,
+                logo=away_team['logo']
+            )
+            team.save()
+            console.print(f'Created new team: {team.name}.', style="green")
         # Find or create the Fixture
         fixture = Fixture.objects.filter(api_id=fixture_id).first()
         if not fixture:
@@ -322,7 +354,7 @@ def make_meta_join_table(season: Season):
                 venue_id=pair[1]
             )
             new_meta_entries.append(meta_instance)
-            console.print(f'Created new meta instance: {pair}.', style="green")
+            console.print(f'Created new meta instance: {team.name, season.year, season.competition.name, pair[0]}.', style="green")
     if new_meta_entries:
         TeamSeasonCompetition.objects.bulk_create(new_meta_entries)
         console.print(f'Successfully added {len(new_meta_entries)} meta instances!', style="bold green")
