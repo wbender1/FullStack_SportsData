@@ -101,7 +101,7 @@ def teams_view(request):
 # Venues View
 def venues_view(request):
     if request.method == 'GET':
-        venues = Venue.objects.all()
+        venues = Venue.objects.all().distinct()
         name_query = request.GET.get("name", '')
         city_query = request.GET.get("city", '')
         country_query = request.GET.get("country", '')
