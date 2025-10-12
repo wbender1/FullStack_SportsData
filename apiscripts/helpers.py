@@ -441,7 +441,7 @@ def fetch_fixture_stats_team(year: int, team_name: str):
             FixtureStats.objects.bulk_create(new_fix_stats)
             console.print(f'{len(new_fix_stats)} new fixture statistics were added!', style="bold green")
         else:
-            console.print(f'No new fixture statistics were added for {team_name}!', style="bold red")
+            console.print(f'No new fixture statistics were added for {team_name} {entry.season.year} {entry.season.competition}!', style="bold red")
 
 
 def fetch_fixture_stats_team_season(year: int, team_name: str, competition_name: str):

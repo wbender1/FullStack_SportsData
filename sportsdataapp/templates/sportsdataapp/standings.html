@@ -1,0 +1,80 @@
+{% extends 'sportsdataapp/base.html' %}
+{% load static %}
+
+{% block content %}
+    <h1>Standings</h1>
+        <p>Search for a Seasons Standings</p>
+
+        <form method="get" action="{% url 'standings' %}" class="form-inline" style="margin-bottom: 20px;">
+            <div class="form-group">
+                <label for="year">Year:</label>
+                <input type="text" id="year" name="year" class="form-control" value="{{ request.GET.year }}">
+            </div>
+            <div class="form-group">
+                <label for="competition">Competition Name:</label>
+                <input type="text" id="competition" name="competition" class="form-control" value="{{ request.GET.competition }}">
+            </div>
+            <button type="submit" class="btn btn-primary" style="margin-left: 10px;">Search</button>
+            <a href="{% url 'standings' %}" class="btn btn-default" style="margin-left: 10px;">Clear</a>
+        </form>
+
+        {% if standings %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Position</th>
+                    <th>Team</th>
+                    <th>Played</th>
+                    <th>Wins</th>
+                    <th>Draws</th>
+                    <th>Losses</th>
+                    <th>Goals For</th>
+                    <th>Goals Against</th>
+                    <th>Goal Differential</th>
+                    <th>Points</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for standing in standings %}
+                    <tr>
+                        <td>{{standing.position }}</td>
+                        <td>{{standing.team }}</td>
+                        <td>{{standing.played }}</td>
+                        <td>{{standing.wins }}</td>
+                        <td>{{standing.draws }}</td>
+                        <td>{{standing.losses }}</td>
+                        <td>{{standing.goals_for }}</td>
+                        <td>{{standing.goals_against }}</td>
+                        <td>{{standing.goal_diff }}</td>
+                        <td>{{standing.points }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Year</th>
+                    <th>Country</th>
+                    <th>Competition</th>
+                    <th>Competition Logo</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for season in seasons %}
+                    <tr>
+                        <td>{{season.year }}</td>
+                        <td>{{season.competition.country }}</td>
+                        <td>{{season.competition }}</td>
+                        <td><img src="{{ season.competition.logo }}" alt="{{ season.competition }} logo" width="40" height="40"></td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4">No seasons found.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+{% endblock %}

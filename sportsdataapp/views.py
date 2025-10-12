@@ -68,7 +68,21 @@ def seasons_view(request):
 
 # Standings View
 def standings_view(request):
-    return 0
+    if request.method == 'GET':
+        standings = Standing.objects.all()
+        year_query = request.GET.get("year")
+        competition_query = request.GET.get("competition")
+        # Filter Standings
+        if year_query and competition_query:
+            standings = standings.filter(season__year__icontains=year_query, season__competition__name__icontains=competition_query)
+            # Order Standings
+            standings = standings.order_by('position')
+            context = {'standings': standings}
+        else:
+            seasons = Season.objects.filter(competition__type="League").all()
+            context = {'seasons': seasons}
+    return render(request, 'sportsdataapp/standings.html', context)
+
 
 # Teams View
 def teams_view(request):
