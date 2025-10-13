@@ -27,150 +27,151 @@
         </form>
 
         {% if fixture %}
-        <p style="text-align: center; font-size: 24px; font-weight: bold;">Fixture</p>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Match Day</th>
-                    <th>Home Team</th>
-                    <th>Away Team</th>
-                    <th>Status</th>
-                    <th>Minutes Played</th>
-                    <th>Date</th>
-                    <th>Venue</th>
-                    <th>Referee</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>{{ fixture.round }}</td>
-                    <td>{{ fixture.home_team }}</td>
-                    <td>{{ fixture.away_team }}</td>
-                    <td>{{ fixture.short_status }}</td>
-                    <td>{{ fixture.elapsed }}</td>
-                    <td>{{ fixture.date }}</td>
-                    <td>{{ fixture.venue }}</td>
-                    <td>{{ fixture.referee }}</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <p style="text-align: center; font-size: 24px; font-weight: bold;">Box Score</p>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Team</th>
-                    <th>Halftime Goals</th>
-                    <th>Full Time Goals</th>
-                    {% if fixture.competition.type == 'Cup' %}
-                        <th>Extra Time Goals</th>
-                        <th>Penalty Goals</th>
-                    {% endif %}
-                    <th>Total Goals</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>{{ fixture.home_team }}</td>
-                    <td>{{ fixture.half_home_goals }}</td>
-                    <td>{{ fixture.full_home_goals }}</td>
-                    {% if fixture.competition.type == 'Cup' %}
-                        <td>{{ fixture.et_home_goals }}</td>
-                        <td>{{ fixture.pen_home_goals }}</td>
-                    {% endif %}
-                    <td>{{ fixture.home_goals }}</td>
-                </tr>
-                <tr>
-                    <td>{{ fixture.away_team }}</td>
-                    <td>{{ fixture.half_away_goals }}</td>
-                    <td>{{ fixture.full_away_goals }}</td>
-                    {% if fixture.competition.type == 'Cup' %}
-                        <td>{{ fixture.et_away_goals }}</td>
-                        <td>{{ fixture.pen_away_goals }}</td>
-                    {% endif %}
-                    <td>{{ fixture.away_goals }}</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <p style="text-align: center; font-size: 24px; font-weight: bold;">Team Statistics</p>
-        <table style="text-align: center;" class="table">
-            <thead>
-                <tr>
-                    <th style="text-align: center;">{{ fixture.home_team }}</th>
-                    <th style="text-align: center;"></th>
-                    <th style="text-align: center;">{{ fixture.away_team }}</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>{{ fixturestats.home_sh_on_goal }}</td>
-                    <td>Shots on Goal</td>
-                    <td>{{ fixturestats.away_sh_on_goal }}</td>
-                </tr>
-                <tr>
-                    <td>{{ fixturestats.home_sh_inside }}</td>
-                    <td>Shots Inside Box</td>
-                    <td>{{ fixturestats.away_sh_inside }}</td>
-                </tr>
-                <tr>
-                    <td>{{ fixturestats.home_sh_outside }}</td>
-                    <td>Shots Outside Box</td>
-                    <td>{{ fixturestats.away_sh_outside }}</td>
-                </tr>
-                <tr>
-                    <td>{{ fixturestats.home_total_sh }}</td>
-                    <td>Total Shots</td>
-                    <td>{{ fixturestats.away_total_sh }}</td>
-                </tr>
-                <tr>
-                    <td>{{ fixturestats.home_saves }}</td>
-                    <td>Saves</td>
-                    <td>{{ fixturestats.away_saves }}</td>
-                </tr>
-                <tr>
-                    <td>{{ fixturestats.home_corners }}</td>
-                    <td>Corners</td>
-                    <td>{{ fixturestats.away_corners }}</td>
-                </tr>
-                <tr>
-                    <td>{{ fixturestats.home_fouls }}</td>
-                    <td>Fouls</td>
-                    <td>{{ fixturestats.away_fouls }}</td>
-                </tr>
-                <tr>
-                    <td>{{ fixturestats.home_yellows }}</td>
-                    <td>Yellows</td>
-                    <td>{{ fixturestats.away_yellows }}</td>
-                </tr>
-                <tr>
-                    <td>{{ fixturestats.home_reds }}</td>
-                    <td>Reds</td>
-                    <td>{{ fixturestats.away_reds }}</td>
-                </tr>
-                <tr>
-                    <td>{{ fixturestats.home_tot_passes }}</td>
-                    <td>Total Passes</td>
-                    <td>{{ fixturestats.away_tot_passes }}</td>
-                </tr>
-                <tr>
-                    <td>{{ fixturestats.home_percent_pass }}</td>
-                    <td>% Accurate Passes</td>
-                    <td>{{ fixturestats.away_percent_pass }}</td>
-                </tr>
-                <tr>
-                    <td>{{ fixturestats.home_possession }}</td>
-                    <td>Possesion</td>
-                    <td>{{ fixturestats.away_possession }}</td>
-                </tr>
-                <tr>
-                    <td>{{ fixturestats.home_ex_goals }}</td>
-                    <td>Expected Goals</td>
-                    <td>{{ fixturestats.away_ex_goals }}</td>
-                </tr>
-            </tbody>
-        </table>
-
+            <p style="text-align: center; font-size: 24px; font-weight: bold;">Fixture</p>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Match Day</th>
+                        <th>Home Team</th>
+                        <th>Away Team</th>
+                        <th>Status</th>
+                        <th>Minutes Played</th>
+                        <th>Date</th>
+                        <th>Venue</th>
+                        <th>Referee</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ fixture.round }}</td>
+                        <td>{{ fixture.home_team }}</td>
+                        <td>{{ fixture.away_team }}</td>
+                        <td>{{ fixture.short_status }}</td>
+                        <td>{{ fixture.elapsed }}</td>
+                        <td>{{ fixture.date }}</td>
+                        <td>{{ fixture.venue }}</td>
+                        <td>{{ fixture.referee }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p style="text-align: center; font-size: 24px; font-weight: bold;">Box Score</p>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Team</th>
+                        <th>Halftime Goals</th>
+                        <th>Full Time Goals</th>
+                        {% if fixture.competition.type == 'Cup' %}
+                            <th>Extra Time Goals</th>
+                            <th>Penalty Goals</th>
+                        {% endif %}
+                        <th>Total Goals</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ fixture.home_team }}</td>
+                        <td>{{ fixture.half_home_goals }}</td>
+                        <td>{{ fixture.full_home_goals }}</td>
+                        {% if fixture.competition.type == 'Cup' %}
+                            <td>{{ fixture.et_home_goals }}</td>
+                            <td>{{ fixture.pen_home_goals }}</td>
+                        {% endif %}
+                        <td>{{ fixture.home_goals }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ fixture.away_team }}</td>
+                        <td>{{ fixture.half_away_goals }}</td>
+                        <td>{{ fixture.full_away_goals }}</td>
+                        {% if fixture.competition.type == 'Cup' %}
+                            <td>{{ fixture.et_away_goals }}</td>
+                            <td>{{ fixture.pen_away_goals }}</td>
+                        {% endif %}
+                        <td>{{ fixture.away_goals }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        {% endif %}
+        {% if fixturestats %}
+            <p style="text-align: center; font-size: 24px; font-weight: bold;">Team Statistics</p>
+            <table style="text-align: center;" class="table">
+                <thead>
+                    <tr>
+                        <th style="text-align: center;">{{ fixture.home_team }}</th>
+                        <th style="text-align: center;"></th>
+                        <th style="text-align: center;">{{ fixture.away_team }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ fixturestats.home_sh_on_goal }}</td>
+                        <td>Shots on Goal</td>
+                        <td>{{ fixturestats.away_sh_on_goal }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ fixturestats.home_sh_inside }}</td>
+                        <td>Shots Inside Box</td>
+                        <td>{{ fixturestats.away_sh_inside }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ fixturestats.home_sh_outside }}</td>
+                        <td>Shots Outside Box</td>
+                        <td>{{ fixturestats.away_sh_outside }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ fixturestats.home_total_sh }}</td>
+                        <td>Total Shots</td>
+                        <td>{{ fixturestats.away_total_sh }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ fixturestats.home_saves }}</td>
+                        <td>Saves</td>
+                        <td>{{ fixturestats.away_saves }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ fixturestats.home_corners }}</td>
+                        <td>Corners</td>
+                        <td>{{ fixturestats.away_corners }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ fixturestats.home_fouls }}</td>
+                        <td>Fouls</td>
+                        <td>{{ fixturestats.away_fouls }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ fixturestats.home_yellows }}</td>
+                        <td>Yellows</td>
+                        <td>{{ fixturestats.away_yellows }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ fixturestats.home_reds }}</td>
+                        <td>Reds</td>
+                        <td>{{ fixturestats.away_reds }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ fixturestats.home_tot_passes }}</td>
+                        <td>Total Passes</td>
+                        <td>{{ fixturestats.away_tot_passes }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ fixturestats.home_percent_pass }}</td>
+                        <td>% Accurate Passes</td>
+                        <td>{{ fixturestats.away_percent_pass }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ fixturestats.home_possession }}</td>
+                        <td>Possesion</td>
+                        <td>{{ fixturestats.away_possession }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ fixturestats.home_ex_goals }}</td>
+                        <td>Expected Goals</td>
+                        <td>{{ fixturestats.away_ex_goals }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        {% else %}
+            <p style="text-align: center; font-size: 24px; font-weight: bold;">No Team Statistics for this Fixture</p>
         {% endif %}
 
 {% endblock %}
