@@ -38,7 +38,40 @@ def countries_view(request):
 
 # Fixtures View
 def fixtures_view(request):
-    return 0
+    if request.method == 'GET':
+        fixtures = Fixture.objects.all()
+        year_query = request.GET.get("year", '')
+        competition_query = request.GET.get("competition", '')
+        team1_query = request.GET.get("team1", '')
+        team2_query = request.GET.get("team2", '')
+        # Filter Fixtures
+        if year_query and competition_query:
+            fixtures = fixtures.filter(season__year__icontains=year_query,
+                                         season__competition__name__icontains=competition_query)
+            context = {}
+            if team1_query:
+                fixtures = fixtures.filter(
+                    Q(home_team__name__icontains=team1_query) |
+                    Q(away_team__name__icontains=team1_query)
+                )
+                team1 = Team.objects.filter(name__icontains=team1_query).first()
+                context['team1'] = team1
+                if team2_query:
+                    fixtures = fixtures.filter(
+                        Q(home_team__name__icontains=team1_query, away_team__name__icontains=team2_query) |
+                        Q(home_team__name__icontains=team2_query, away_team__name__icontains=team1_query)
+                    )
+                    team2 = Team.objects.filter(name__icontains=team2_query).first()
+                    context['team2'] = team2
+            # Order Fixtures
+            fixtures = fixtures.order_by('date')
+            season = Season.objects.filter(year__icontains=year_query, competition__name__icontains=competition_query).first()
+            context['fixtures'] = fixtures
+            context['season'] = season
+        else:
+            seasons = Season.objects.all()
+            context = {'seasons': seasons}
+    return render(request, 'sportsdataapp/fixtures.html', context)
 
 # Fixture Stats View
 def fixture_stats_view(request):
@@ -70,8 +103,8 @@ def seasons_view(request):
 def standings_view(request):
     if request.method == 'GET':
         standings = Standing.objects.all()
-        year_query = request.GET.get("year")
-        competition_query = request.GET.get("competition")
+        year_query = request.GET.get("year", '')
+        competition_query = request.GET.get("competition", '')
         # Filter Standings
         if year_query and competition_query:
             standings = standings.filter(season__year__icontains=year_query, season__competition__name__icontains=competition_query)

@@ -1,0 +1,91 @@
+{% extends 'sportsdataapp/base.html' %}
+{% load static %}
+
+{% block content %}
+    <h1>Fixtures</h1>
+        <p>Search for Fixtures</p>
+
+        <form method="get" action="{% url 'fixtures' %}" class="form-inline" style="margin-bottom: 20px;">
+            <div class="form-group">
+                <label for="year">Year:</label>
+                <input type="text" id="year" name="year" class="form-control" value="{{ request.GET.year }}">
+            </div>
+            <div class="form-group">
+                <label for="competition">Competition Name:</label>
+                <input type="text" id="competition" name="competition" class="form-control" value="{{ request.GET.competition }}">
+            </div>
+            <div class="form-group">
+                <label for="team1">Team 1:</label>
+                <input type="text" id="team1" name="team1" class="form-control" value="{{ request.GET.team1 }}">
+            </div>
+            <div class="form-group">
+                <label for="team2">Team 2:</label>
+                <input type="text" id="team2" name="team2" class="form-control" value="{{ request.GET.team2 }}">
+            </div>
+            <button type="submit" class="btn btn-primary" style="margin-left: 10px;">Search</button>
+            <a href="{% url 'fixtures' %}" class="btn btn-default" style="margin-left: 10px;">Clear</a>
+        </form>
+
+        {% if fixtures %}
+        {% if team2 %}
+        <p>Fixtures for {{ team1 }} vs. {{ team2 }} from {{ season.year }} {{ season.competition }}</p>
+        {% elif team1 %}
+        <p>Fixtures for {{ team1 }} from {{ season.year }} {{ season.competition }}</p>
+        {% else %}
+        <p>Fixtures from {{ season.year }} {{ season.competition }}</p>
+        {% endif %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Match Day</th>
+                    <th>Home Team</th>
+                    <th>Home Score</th>
+                    <th>Away Team</th>
+                    <th>Away Score</th>
+                    <th>Venue</th>
+                    <th>Date</th>
+                    <th>Referee</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for fixture in fixtures %}
+                    <tr>
+                        <td>{{ fixture.round }}</td>
+                        <td>{{ fixture.home_team }}</td>
+                        <td>{{ fixture.home_goals }}</td>
+                        <td>{{ fixture.away_team }}</td>
+                        <td>{{ fixture.away_goals }}</td>
+                        <td>{{ fixture.venue }}</td>
+                        <td>{{ fixture.date }}</td>
+                        <td>{{ fixture.referee }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Year</th>
+                    <th>Country</th>
+                    <th>Competition</th>
+                    <th>Competition Logo</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for season in seasons %}
+                    <tr>
+                        <td>{{season.year }}</td>
+                        <td>{{season.competition.country }}</td>
+                        <td>{{season.competition }}</td>
+                        <td><img src="{{ season.competition.logo }}" alt="{{ season.competition }} logo" width="40" height="40"></td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4">No seasons found.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+{% endblock %}
