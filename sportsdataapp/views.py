@@ -44,38 +44,33 @@ def fixtures_view(request):
         competition_query = request.GET.get("competition", '')
         team1_query = request.GET.get("team1", '')
         team2_query = request.GET.get("team2", '')
+        context = {}
         # Filter Fixtures
         if year_query and competition_query:
-            fixtures = fixtures.filter(season__year__icontains=year_query,
-                                         season__competition__name__icontains=competition_query)
-            context = {}
+            fixtures = fixtures.filter(season__year__icontains=year_query, season__competition__name__icontains=competition_query)
             if team1_query:
-                fixtures = fixtures.filter(
-                    Q(home_team__name__icontains=team1_query) |
-                    Q(away_team__name__icontains=team1_query)
-                )
-                team1 = Team.objects.filter(name__icontains=team1_query).first()
-                context['team1'] = team1
+                fixtures = fixtures.filter(Q(home_team__name__icontains=team1_query) |
+                                           Q(away_team__name__icontains=team1_query))
+                context['team1'] = Team.objects.filter(name__icontains=team1_query).first()
                 if team2_query:
-                    fixtures = fixtures.filter(
-                        Q(home_team__name__icontains=team1_query, away_team__name__icontains=team2_query) |
-                        Q(home_team__name__icontains=team2_query, away_team__name__icontains=team1_query)
-                    )
-                    team2 = Team.objects.filter(name__icontains=team2_query).first()
-                    context['team2'] = team2
+                    fixtures = fixtures.filter(Q(home_team__name__icontains=team1_query, away_team__name__icontains=team2_query) |
+                                               Q(home_team__name__icontains=team2_query, away_team__name__icontains=team1_query))
+                    context['team2'] = Team.objects.filter(name__icontains=team2_query).first()
             # Order Fixtures
-            fixtures = fixtures.order_by('date')
-            season = Season.objects.filter(year__icontains=year_query, competition__name__icontains=competition_query).first()
-            context['fixtures'] = fixtures
-            context['season'] = season
+            context['fixtures'] = fixtures.order_by('date')
+            context['season'] = Season.objects.filter(year__icontains=year_query, competition__name__icontains=competition_query).first()
         else:
-            seasons = Season.objects.all()
-            context = {'seasons': seasons}
+            context['seasons'] = Season.objects.all()
     return render(request, 'sportsdataapp/fixtures.html', context)
 
 # Fixture Stats View
-def fixture_stats_view(request):
-    return 0
+def fixture_stats_view(request, fixture_api_id):
+    context = {}
+    context['fixture'] = Fixture.objects.filter(api_id=fixture_api_id).first()
+    context['fixturestats'] = FixtureStats.objects.filter(fixture__api_id=fixture_api_id).first()
+
+    return render(request, 'sportsdataapp/fixturestats.html', context)
+
 
 # Seasons View
 def seasons_view(request):
