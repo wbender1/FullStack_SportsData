@@ -2,10 +2,10 @@
 {% load static %}
 
 {% block content %}
-    <h1>Standings</h1>
-        <p>Search for a Seasons Standings</p>
+    <h1 style="text-align: center;">Standings</h1>
+        <p style="text-align: center;">Search for a Seasons Standings</p>
 
-        <form method="get" action="{% url 'standings' %}" class="form-inline" style="margin-bottom: 20px;">
+        <form method="get" action="{% url 'standings' %}" class="form-inline" style="text-align: center; margin-bottom: 20px;">
             <div class="form-group">
                 <label for="year">Year:</label>
                 <input type="text" id="year" name="year" class="form-control" value="{{ request.GET.year }}">

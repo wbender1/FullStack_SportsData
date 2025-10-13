@@ -2,10 +2,10 @@
 {% load static %}
 
 {% block content %}
-    <h1>Fixtures</h1>
-        <p>Search for Fixtures and View Stats</p>
+    <h1 style="text-align: center;">Fixtures</h1>
+        <p style="text-align: center;">Search for Fixtures and View Stats</p>
 
-        <form method="get" action="{% url 'fixtures' %}" class="form-inline" style="margin-bottom: 20px;">
+        <form method="get" action="{% url 'fixtures' %}" class="form-inline" style="text-align: center; margin-bottom: 20px;">
             <div class="form-group">
                 <label for="year">Year:</label>
                 <input type="text" id="year" name="year" class="form-control" value="{{ request.GET.year }}">
@@ -28,11 +28,11 @@
 
         {% if fixtures %}
             {% if team2 %}
-            <p>Fixtures for {{ team1 }} vs. {{ team2 }} from {{ season.year }} {{ season.competition }}</p>
+            <p style="text-align: center; font-size: 20px; font-weight: bold;">Fixtures for {{ team1 }} vs. {{ team2 }} from {{ season.year }} {{ season.competition }}</p>
             {% elif team1 %}
-            <p>Fixtures for {{ team1 }} from {{ season.year }} {{ season.competition }}</p>
+            <p style="text-align: center; font-size: 20px; font-weight: bold;">Fixtures for {{ team1 }} from {{ season.year }} {{ season.competition }}</p>
             {% else %}
-            <p>Fixtures from {{ season.year }} {{ season.competition }}</p>
+            <p style="text-align: center; font-size: 20px; font-weight: bold;">Fixtures from {{ season.year }} {{ season.competition }}</p>
             {% endif %}
         <table class="table">
             <thead>
